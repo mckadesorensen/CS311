@@ -47,6 +47,9 @@ public:
                                        _size(size),
                                        _data(new value_type[_capacity]){
     }
+    //   ****************
+    //  *** Big Five ***
+    // ****************
     // Copy Ctor
     // Strong Guarantee
     TSSArray(const TSSArray & other);
@@ -60,13 +63,14 @@ public:
     ~TSSArray(){
         delete [] _data;
     }
+    // Copy Assignment
+    TSSArray & operator=(const TSSArray & rhs);
+    // Move Assignment
+    TSSArray & operator=(TSSArray && rhs) noexcept;
 
     //   ******************************
     //  **** Overloaded operators ****
     // ******************************
-    TSSArray & operator=(const TSSArray & rhs);
-
-    TSSArray & operator=(TSSArray && rhs) noexcept;
 
     value_type & operator[](size_type index) noexcept{
         return _data[index];
@@ -114,8 +118,7 @@ public:
 
     // insert
     // ??? Guarantee
-    iterator insert(iterator pos,
-                    const value_type & item);
+    iterator insert(iterator pos, const value_type & item);
 
     // erase
     // ??? Guarantee
