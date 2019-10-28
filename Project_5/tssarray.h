@@ -19,6 +19,7 @@
 
 // TODO: ADD CLASS INVARIANTS
 // TODO: PUT "EXCEPTION NEUTRAL" BEFORE EVERY FUNCTION
+// TODO: ADD EACH FUNCTIONS GUARANTEE
 
 template <typename Val>
 class TSSArray{
@@ -132,24 +133,26 @@ public:
     // ??? Guarantee
     // 0 <= _size <= _capacity
     void resize(size_type new_size){
-            if( new_size > _capacity)
+            if( new_size >= _capacity )
                 _capacity = new_size * 2;
             _size = new_size;
-            value_type * new_data = new value_type[_size];
-            new_data = _data;
+
+            TSSArray<value_type> temp(new_size);
+            swap(temp);
+
     }
 
     // insert
     // ??? Guarantee
     iterator insert(iterator pos, const value_type & item){
-        // Resizing to add the new value
+////       Resizing to add the new value
+        auto index = pos - this->begin();
         this->resize(this->_size+1);
         std::rotate(this->begin(), pos-1, this->end());
         this->push_back(item);
         std::rotate(this->begin(), pos-1, this->end());
-        // TODo: Need to return a location incase we made it larger
-
-        return nullptr;
+        auto * itr = _data[index];
+        return itr;
     }
 
     // erase
