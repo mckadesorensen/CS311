@@ -8,8 +8,9 @@
 #ifndef _SSARRAY_H_INCLUDED
 #define _SSARRAY_H_INCLUDED
 
-#include <cstddef> //  For std::size_t
+#include <cstddef>   //  For std::size_t
 #include <algorithm> //  For std::max
+#include <iostream>  //  Remove when Finished with project
 
 
 //   ***********************************
@@ -19,11 +20,11 @@
 // TODO: ADD CLASS INVARIANTS
 // TODO: PUT "EXCEPTION NEUTRAL" BEFORE EVERY FUNCTION
 
-template <typename T>
+template <typename Val>
 class TSSArray{
 public:
-    using value_type =  T; //  Type of data being contained
-    using size_type = std::size_t; // TODO: Add a comment here
+    using value_type =  Val;       //  Type of data being contained
+    using size_type = std::size_t; //  Type of sizes & indices
 
     // Iterators: Random-access iterator types
     using iterator = value_type *;
@@ -46,17 +47,26 @@ public:
     explicit TSSArray(size_t size=0) : _capacity(std::max(size, size_type(DEFAULT_CAP))),
                                        _size(size),
                                        _data(new value_type[_capacity]){
+
     }
+
     //   ****************
     //  *** Big Five ***
     // ****************
     // Copy Ctor
     // Strong Guarantee
-    TSSArray(const TSSArray & other);
+    TSSArray(const TSSArray & other) : _data(new value_type[other.size()]),
+                                       _size(other.size()){
+        for(size_type i = 0; i != _size; ++i)
+            _data[i] = other[i];
+    }
 
     // Move Ctor
     // No-Throw Guarantee
-    TSSArray(TSSArray && other) noexcept;
+    TSSArray(TSSArray && other) noexcept : _data(other._data),
+                                           _size(other.size()){
+        other._data = nullptr;
+    }
 
     // Dctor
     // No-Throw Guarantee
@@ -64,14 +74,20 @@ public:
         delete [] _data;
     }
     // Copy Assignment
-    TSSArray & operator=(const TSSArray & rhs);
+    TSSArray & operator=(const TSSArray & rhs) {
+        TSSArray to_copy(rhs);
+        swap(to_copy);
+        return *this;
+    }
     // Move Assignment
-    TSSArray & operator=(TSSArray && rhs) noexcept;
+    TSSArray & operator=(TSSArray && rhs) noexcept {
+        swap(rhs);
+        return *this;
+    }
 
     //   ******************************
     //  **** Overloaded operators ****
     // ******************************
-
     value_type & operator[](size_type index) noexcept{
         return _data[index];
     }
@@ -114,19 +130,40 @@ public:
 
     // resize
     // ??? Guarantee
-    void resize(size_type newsize);
+    // 0 <= _size <= _capacity
+    void resize(size_type new_size){
+            if( new_size > _capacity)
+                _capacity = new_size * 2;
+            _size = new_size;
+            value_type * new_data = new value_type[_size];
+            new_data = _data;
+    }
 
     // insert
     // ??? Guarantee
-    iterator insert(iterator pos, const value_type & item);
+    iterator insert(iterator pos, const value_type & item){
+        // Resizing to add the new value
+        this->resize(this->_size+1);
+        std::rotate(this->begin(), pos-1, this->end());
+        this->push_back(item);
+        std::rotate(this->begin(), pos-1, this->end());
+        // TODo: Need to return a location incase we made it larger
+
+        return nullptr;
+    }
 
     // erase
     // ??? Guarantee
-    iterator erase(iterator pos);
+    iterator erase(iterator pos){
+        std::rotate(this->begin(), pos-1,this->end());
+        this->pop_back();
+        std::rotate(this->begin(), pos-1, this->end());
+        return pos;
+    }
 
     // push_back
     // ??? Guarantee
-    void push_back(value_type item){
+    void push_back(const value_type & item){
         insert(end(), item);
     }
 
@@ -138,7 +175,11 @@ public:
 
     // swap
     // No-Throw Guarantee
-    void swap(TSSArray & other) noexcept;
+    void swap(TSSArray & other) noexcept{
+        std::swap(this->_size, other._size);
+        std::swap(this->_capacity, other._capacity);
+        std::swap(this->_data, other._data);
+    }
 
 };
 
