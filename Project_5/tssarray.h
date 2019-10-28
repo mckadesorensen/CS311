@@ -35,7 +35,7 @@ private:
     // Capacity of default-constructed object
     enum { DEFAULT_CAP = 16 };
 
-    size_type _capacity; //  Size of allocated array
+    size_type _capacity{}; //  Size of allocated array
     size_type _size;     //  Size of the array
     value_type * _data;  //  Pointer to the array
 
@@ -133,25 +133,35 @@ public:
     // ??? Guarantee
     // 0 <= _size <= _capacity
     void resize(size_type new_size){
-            if( new_size >= _capacity )
-                _capacity = new_size * 2;
-            _size = new_size;
 
-            TSSArray<value_type> temp(new_size);
-            swap(temp);
+        if(new_size <= _capacity) {
+            _size = new_size;
+            return;
+        }
+
+        // Fix
+        auto new_capacity = 2* _capacity;
+
+        value_type * newdata = new value_type[new_capacity];
+        std::copy(_data, _data+_size, newdata);
+        _size = new_size;
+        _data = newdata;
+        _capacity = new_capacity;
+
 
     }
 
     // insert
     // ??? Guarantee
     iterator insert(iterator pos, const value_type & item){
-////       Resizing to add the new value
+        // Resizing to add the new value
         auto index = pos - this->begin();
         this->resize(this->_size+1);
         std::rotate(this->begin(), pos-1, this->end());
         this->push_back(item);
         std::rotate(this->begin(), pos-1, this->end());
-        auto * itr = _data[index];
+        // Creating a pointer to the data.
+        auto * itr = _data + index;
         return itr;
     }
 
