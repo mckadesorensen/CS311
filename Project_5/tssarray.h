@@ -56,16 +56,24 @@ public:
     // ****************
     // Copy Ctor
     // Strong Guarantee
-    TSSArray(const TSSArray & other) : _data(new value_type[other.size()]),
+    TSSArray(const TSSArray & other) : _capacity(other._capacity),
+                                       _data(new value_type[other._capacity]),
                                        _size(other.size()){
-        for(size_type i = 0; i != _size; ++i)
-            _data[i] = other[i];
+        try{
+            std::copy(other.begin(),other.end(),this->begin());
+        } catch(...){
+            delete [] _data;
+            throw;
+        }
     }
 
     // Move Ctor
     // No-Throw Guarantee
-    TSSArray(TSSArray && other) noexcept : _data(other._data),
+    TSSArray(TSSArray && other) noexcept : _capacity(other._capacity),
+                                           _data(other._data),
                                            _size(other.size()){
+        other._size = 0;
+        other._capacity = 0;
         other._data = nullptr;
     }
 
@@ -139,41 +147,40 @@ public:
             return;
         }
 
-        // Fix
-        auto new_capacity = 2* _capacity;
 
-        value_type * newdata = new value_type[new_capacity];
-        std::copy(_data, _data+_size, newdata);
-        _size = new_size;
-        _data = newdata;
-        _capacity = new_capacity;
+        auto temp = {_capacity, _size, new_size};
+        size_type new_capacity = 2*std::max(temp);
+        value_type* new_data = new value_type[new_capacity];
+        try{
+            std::copy(this->begin(),this->end(), new_data);
+        } catch(...){
+            delete [] new_data;
+            throw;
+        }
 
-
+        std::swap(_size, new_size);
+        std::swap(_data, new_data);
+        std::swap(_capacity, new_capacity);
     }
 
     // insert
     // ??? Guarantee
     iterator insert(iterator pos, const value_type & item){
         // Resizing to add the new value
-        auto index = pos - this->begin();
-        this->resize(this->_size+1);
-        std::rotate(this->begin(), pos-1, this->end());
-        this->push_back(item);
-        std::rotate(this->begin(), pos-1, this->end());
-        // Creating a pointer to the data.
-        auto * itr = _data + index;
-        return itr;
+        auto itr = pos - begin();
+        this->resize(this->size()+1);
+        _data[this->size() - 1] = item;
+        std::rotate(this->begin()+itr, this->end() -1, this->end());
+        return this->begin() + itr;
     }
 
     // erase
     // ??? Guarantee
-    iterator erase(iterator pos){
-        std::rotate(this->begin(), pos-1,this->end());
-        this->pop_back();
-        std::rotate(this->begin(), pos-1, this->end());
+    iterator erase(iterator pos) {
+        std::rotate(pos, pos + 1, this->end());
+        this->resize(this->size() - 1);
         return pos;
     }
-
     // push_back
     // ??? Guarantee
     void push_back(const value_type & item){
