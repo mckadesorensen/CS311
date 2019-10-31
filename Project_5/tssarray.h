@@ -172,12 +172,12 @@ public:
     //   new_size >= 0
     void resize(size_type new_size){
 
-        if(new_size <= _capacity){
-            _size = new_size;
+        if(new_size <= this->_capacity){
+            this->_size = new_size;
             return;
         }
 
-        auto temp = {_capacity, _size, new_size};
+        auto temp = {this->_capacity, this->_size, new_size};
         size_type new_capacity = 2*std::max(temp);
         value_type* new_data = new value_type[new_capacity];
         try{
@@ -187,9 +187,9 @@ public:
             throw;
         }
 
-        std::swap(_size, new_size);
-        std::swap(_data, new_data);
-        std::swap(_capacity, new_capacity);
+        std::swap(this->_size, new_size);
+        std::swap(this->_data, new_data);
+        std::swap(this->_capacity, new_capacity);
     }
 
     // insert
@@ -199,7 +199,7 @@ public:
         // Resizing to add the new value
         auto itr = pos - begin();
         this->resize(this->size()+1);
-        _data[this->size() - 1] = item;
+        this->_data[this->size() - 1] = item;
         std::rotate(this->begin()+itr, this->end() -1, this->end());
         return this->begin() + itr;
     }
