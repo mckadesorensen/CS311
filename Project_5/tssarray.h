@@ -1,16 +1,17 @@
-// ssarray.h
+// tssarray.h
 // McKade Sorensen & Chenyi Ling
 // Start 10/23/2019
 // Finished 10/30/2019
 //
-// TODO: Write this stuff boi
+// tssarray.h is a generic container class, with
+// client-specified value type.
+// There is no associated source file with tssarray.h
 
 #ifndef _SSARRAY_H_INCLUDED
 #define _SSARRAY_H_INCLUDED
 
 #include <cstddef>   //  For std::size_t
 #include <algorithm> //  For std::max
-
 
 //   ***********************************
 //  *** TSSArray - Class Definition ***
@@ -21,7 +22,11 @@
 // ***************************
 // Generic container, with client-specified value type
 // Invariants:
-//      TODO: FINISH THIS PART
+//      0 <= _size <= _capacity
+//      The var _data points to a array of _capacity ints
+//      _data may be nullptr if _capacity is 0
+//      _data points to memory allocated with new[], owned by this*
+//      large enough to hold Val, _size being the value passed to the ctor
 // Requirement on Types:
 //      Val must be a copy ctor and a (non-throwing) dctor
 
@@ -49,6 +54,9 @@ public:
     // ********************
     // Default Ctor
     // Strong Guarantee
+    // No implicit type conversions
+    // Pre:
+    //    size >= 0
     explicit TSSArray(size_t size=0) : _capacity(std::max(size, size_type(DEFAULT_CAP))),
                                        _size(size),
                                        _data(new value_type[_capacity]){
@@ -88,12 +96,15 @@ public:
     }
     // Copy Assignment
     // No-Throw Guarantee
+    // Creates a new copy, does not change the original
     TSSArray & operator=(const TSSArray & rhs){
         TSSArray to_copy(rhs);
         swap(to_copy);
         return *this;
     }
     // Move Assignment
+    // No-Throw Guarantee
+    // May modify the original object
     TSSArray & operator=(TSSArray && rhs) noexcept{
         swap(rhs);
         return *this;
@@ -103,10 +114,16 @@ public:
     //  **** Overloaded operators ****
     // ******************************
     // Exception neutral
+    // No-Throw Guarantee
+    // Pre:
+    //   0 <= index <= size -1
     value_type & operator[](size_type index) noexcept{
         return _data[index];
     }
     // Exception neutral
+    // No-Throw Guarantee
+    // Pre:
+    //   0 <= index <= size -1
     const value_type & operator[](size_type index) const noexcept{
         return _data[index];
     }
@@ -151,7 +168,8 @@ public:
     // resize
     // Exception neutral
     // Basic Guarantee
-    // 0 <= _size <= _capacity
+    // Pre:
+    //   new_size >= 0
     void resize(size_type new_size){
 
         if(new_size <= _capacity){
@@ -218,6 +236,6 @@ public:
         std::swap(this->_data, other._data);
     }
 
-};
+}; // End of TSSArray
 
 #endif
