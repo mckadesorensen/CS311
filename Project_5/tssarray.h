@@ -3,7 +3,7 @@
 // Start 10/23/2019
 // Finished 10/30/2019
 //
-// Header file for tssarray.cpp
+// TODO: Write this stuff boi
 
 #ifndef _SSARRAY_H_INCLUDED
 #define _SSARRAY_H_INCLUDED
