@@ -88,13 +88,13 @@ public:
     }
     // Copy Assignment
     // No-Throw Guarantee
-    TSSArray & operator=(const TSSArray & rhs) {
+    TSSArray & operator=(const TSSArray & rhs){
         TSSArray to_copy(rhs);
         swap(to_copy);
         return *this;
     }
     // Move Assignment
-    TSSArray & operator=(TSSArray && rhs) noexcept {
+    TSSArray & operator=(TSSArray && rhs) noexcept{
         swap(rhs);
         return *this;
     }
@@ -154,7 +154,7 @@ public:
     // 0 <= _size <= _capacity
     void resize(size_type new_size){
 
-        if(new_size <= _capacity) {
+        if(new_size <= _capacity){
             _size = new_size;
             return;
         }
@@ -165,7 +165,7 @@ public:
         value_type* new_data = new value_type[new_capacity];
         try{
             std::copy(this->begin(),this->end(), new_data);
-        } catch(...){
+        }catch(...){
             delete [] new_data;
             throw;
         }
@@ -190,7 +190,7 @@ public:
     // erase
     // Exception neutral
     // Basic Guarantee
-    iterator erase(iterator pos) {
+    iterator erase(iterator pos){
         std::rotate(pos, pos + 1, this->end());
         this->resize(this->size() - 1);
         return pos;
