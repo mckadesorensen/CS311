@@ -16,8 +16,14 @@
 //  *** TSSArray - Class Definition ***
 // ***********************************
 
-// TODO: ADD CLASS INVARIANTS
-// TODO: ADD EACH FUNCTIONS GUARANTEE
+//   ***************************
+//  *** TSSArray Invariants ***
+// ***************************
+// Generic container, with client-specified value type
+// Invariants:
+//      TODO: FINISH THIS PART
+// Requirement on Types:
+//      Val must be a copy ctor and a (non-throwing) dctor
 
 template <typename Val>
 class TSSArray{
