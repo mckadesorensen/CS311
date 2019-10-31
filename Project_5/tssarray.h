@@ -73,7 +73,7 @@ public:
                                        _size(other.size()){
         try{
             std::copy(other.begin(),other.end(),this->begin());
-        } catch(...){
+        }catch(...){
             delete [] _data;
             throw;
         }
