@@ -1,7 +1,7 @@
 // ssarray.h
-// McKade Sorensen (Douglas)
+// McKade Sorensen & Chenyi Ling
 // Start 10/23/2019
-// Finished / /
+// Finished 10/30/2019
 //
 // Header file for tssarray.cpp
 
@@ -10,7 +10,6 @@
 
 #include <cstddef>   //  For std::size_t
 #include <algorithm> //  For std::max
-#include <iostream>  //  Remove when Finished with project
 
 
 //   ***********************************
@@ -18,7 +17,6 @@
 // ***********************************
 
 // TODO: ADD CLASS INVARIANTS
-// TODO: PUT "EXCEPTION NEUTRAL" BEFORE EVERY FUNCTION
 // TODO: ADD EACH FUNCTIONS GUARANTEE
 
 template <typename Val>
@@ -55,7 +53,7 @@ public:
     //  *** Big Five ***
     // ****************
     // Copy Ctor
-    // Strong Guarantee
+    // Basic Guarantee
     TSSArray(const TSSArray & other) : _capacity(other._capacity),
                                        _data(new value_type[other._capacity]),
                                        _size(other.size()){
@@ -83,6 +81,7 @@ public:
         delete [] _data;
     }
     // Copy Assignment
+    // No-Throw Guarantee
     TSSArray & operator=(const TSSArray & rhs) {
         TSSArray to_copy(rhs);
         swap(to_copy);
@@ -97,9 +96,11 @@ public:
     //   ******************************
     //  **** Overloaded operators ****
     // ******************************
+    // Exception neutral
     value_type & operator[](size_type index) noexcept{
         return _data[index];
     }
+    // Exception neutral
     const value_type & operator[](size_type index) const noexcept{
         return _data[index];
     }
@@ -108,18 +109,21 @@ public:
     //  *** Member Functions ***
     // ************************
     // size
+    // Exception neutral
     // No-Throw Guarantee
     size_type size() const noexcept{
         return _size;
     }
 
     // empty
+    // Exception neutral
     // No-Throw Guarantee
     bool empty() const noexcept{
         return size() == 0;
     }
 
     // begin - non-const & const
+    // Exception neutral
     // No-Throw Guarantee
     iterator begin() noexcept{
         return _data;
@@ -129,6 +133,7 @@ public:
     }
 
     // end - non-const & const
+    // Exception neutral
     // No-Throw Guarantee
     iterator end() noexcept{
         return begin() + size();
@@ -138,7 +143,8 @@ public:
     }
 
     // resize
-    // ??? Guarantee
+    // Exception neutral
+    // Basic Guarantee
     // 0 <= _size <= _capacity
     void resize(size_type new_size){
 
@@ -164,7 +170,8 @@ public:
     }
 
     // insert
-    // ??? Guarantee
+    // Exception neutral
+    // Basic Guarantee
     iterator insert(iterator pos, const value_type & item){
         // Resizing to add the new value
         auto itr = pos - begin();
@@ -175,25 +182,29 @@ public:
     }
 
     // erase
-    // ??? Guarantee
+    // Exception neutral
+    // Basic Guarantee
     iterator erase(iterator pos) {
         std::rotate(pos, pos + 1, this->end());
         this->resize(this->size() - 1);
         return pos;
     }
     // push_back
-    // ??? Guarantee
+    // Exception neutral
+    // Basic Guarantee
     void push_back(const value_type & item){
         insert(end(), item);
     }
 
     // pop_back
-    // ??? Guarantee
+    // Exception neutral
+    // Basic Guarantee
     void pop_back(){
         erase(end()-1);
     }
 
     // swap
+    // Exception neutral
     // No-Throw Guarantee
     void swap(TSSArray & other) noexcept{
         std::swap(this->_size, other._size);
