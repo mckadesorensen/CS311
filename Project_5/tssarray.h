@@ -11,7 +11,7 @@
 #define _SSARRAY_H_INCLUDED
 
 #include <cstddef>   //  For std::size_t
-#include <algorithm> //  For std::max
+#include <algorithm> //  For std::max, std::copy, std::rotate
 
 // ***********************************
 // *** TSSArray - Class Definition ***
