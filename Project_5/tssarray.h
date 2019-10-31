@@ -171,14 +171,15 @@ public:
     // Pre:
     //   new_size >= 0
     void resize(size_type new_size){
-
+        // new_capacity should be at least 2 the old, at least new_size
+        // and at minimum the size of _capacity
         if(new_size <= this->_capacity){
             this->_size = new_size;
             return;
         }
 
-        auto temp = {this->_capacity, this->_size, new_size};
-        size_type new_capacity = 2*std::max(temp);
+        auto temp = {this->_capacity * 2, this->_size, new_size};
+        size_type new_capacity = std::max(temp);
         value_type* new_data = new value_type[new_capacity];
         try{
             std::copy(this->begin(),this->end(), new_data);
