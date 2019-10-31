@@ -177,7 +177,6 @@ public:
             return;
         }
 
-
         auto temp = {_capacity, _size, new_size};
         size_type new_capacity = 2*std::max(temp);
         value_type* new_data = new value_type[new_capacity];
