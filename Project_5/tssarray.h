@@ -13,12 +13,12 @@
 #include <cstddef>   //  For std::size_t
 #include <algorithm> //  For std::max
 
-//   ***********************************
-//  *** TSSArray - Class Definition ***
+// ***********************************
+// *** TSSArray - Class Definition ***
 // ***********************************
 
-//   ***************************
-//  *** TSSArray Invariants ***
+// ***************************
+// *** TSSArray Invariants ***
 // ***************************
 // Generic container, with client-specified value type
 // Invariants:
@@ -49,8 +49,8 @@ private:
     value_type * _data;  //  Pointer to the array
 
 public:
-    //   ********************
-    //  *** Constructors ***
+    // ********************
+    // *** Constructors ***
     // ********************
     // Default Ctor
     // Strong Guarantee
@@ -63,8 +63,8 @@ public:
 
     }
 
-    //   ****************
-    //  *** Big Five ***
+    // ****************
+    // *** Big Five ***
     // ****************
     // Copy Ctor
     // Basic Guarantee
@@ -110,8 +110,8 @@ public:
         return *this;
     }
 
-    //   ******************************
-    //  **** Overloaded operators ****
+    // ******************************
+    // **** Overloaded operators ****
     // ******************************
     // Exception neutral
     // No-Throw Guarantee
@@ -128,8 +128,8 @@ public:
         return _data[index];
     }
 public:
-    //   ************************
-    //  *** Member Functions ***
+    // ************************
+    // *** Member Functions ***
     // ************************
     // size
     // Exception neutral
