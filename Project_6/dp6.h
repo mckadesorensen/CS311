@@ -71,13 +71,9 @@ public:
 
     }
     template<typename F>
-    void traverse(F);
+    void traverse(F) {
+    }
 
 };
 
-template<typename T, typename T2>
-template<typename F>
-void LLMap<T, T2>::traverse(F) {
-
-}
 #endif
