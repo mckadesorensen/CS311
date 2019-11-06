@@ -4,19 +4,17 @@
 
 #include <cstddef>      // For std::size_t
 #include <memory>       // For std::unique_ptr
-#include <utility>      // For std::pair
 #include "llnode2.h"
 
 template<typename ValType>
 void reverseList(unique_ptr<LLNode2<ValType>> & head){
-
-}
-//    auto newHead;
+//    ValType * newHead;
 //    while(head){
-//        newHead = head;
-//        head = head->_next;
+//        newHead = std::move(head);
+//        head = std::move(head->_next);
 //    }
-//    head = newHead;
+//    head = std::move(newHead);
+}
 
 
 template<typename KeyType, typename DataType>
@@ -30,7 +28,7 @@ private:
     struct KVPair{
         key_type key;
         data_type data;
-    };
+    } kvPair;
 public:
     std::unique_ptr<LLNode2<KVPair>> _ptr;
 
@@ -65,7 +63,6 @@ public:
         return nullptr;
     }
     void insert(key_type key, data_type var){
-
     }
     void erase(key_type key){
 
