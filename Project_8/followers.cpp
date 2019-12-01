@@ -1,4 +1,4 @@
-// tssarray.h
+// followers.cpp
 // McKade Sorensen & Chenyi Ling
 // Start 11/30/2019
 // Finished 10/30/2019
