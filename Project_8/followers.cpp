@@ -18,6 +18,7 @@ using std::map;
 using std::vector;
 #include <algorithm>
 using std::sort;
+
 // Gets a file name as an input from a user and returns that input
 string get_file_name(){
     cout << "Please insert the name of file: ";
