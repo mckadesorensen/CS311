@@ -19,7 +19,6 @@ using std::vector;
 #include <algorithm>
 using std::sort;
 
-
 // Gets a file name as an input from a user and returns that input
 // Does not throw
 string get_file_name(){
@@ -30,7 +29,6 @@ string get_file_name(){
     return file_name;
 }
 
-
 // Opens a file
 // throws - TODO: Check to see if it throws for sure
 ifstream open_file(){
@@ -38,7 +36,6 @@ ifstream open_file(){
     file.open(get_file_name());
     return file;
 }
-
 
 // Checks each item within a vec against data. If data == any item in vec returns false
 // otherwise it returns true.
@@ -53,11 +50,9 @@ bool check_items(const string & data, const vector<string> & vec){
     return true;
 }
 
-map<string, vector<string>> insert(const string & data,
-                                   string & last_data,
-                                   map<string, vector<string>> & the_map){
-
+map<string, vector<string>> insert(const string & data, string & last_data, map<string, vector<string>> & the_map){
     vector<string> vec;
+
     if(the_map.empty()){                        // If the map is empty, create new key, and value.
         the_map[data] = vec;
     } else {
@@ -108,11 +103,21 @@ map<string, vector<string>> read_file() {
     return the_map;
 }
 
+// Returns the amount of distinct words within a map
+// TODO: Figure out if it throws or not
+// Pre:
+//  None
+int amount_of_distinct_words(const map<string, vector<string>> & the_map){
+    return the_map.size();
+}
+
 // Sorts and formats each keys vector and prints the output.
 // Throws - TODO: Check to see if it actually throws
 // Pre:
 //  None
 void output_the_map(const map<string, vector<string>> & the_map){
+    cout << "Number of distinct words: " << amount_of_distinct_words(the_map) << "\n\n";
+
     for(auto it : the_map){                        // Loop through each key to sort and format them
         string x;
         sort(it.second.begin(), it.second.end());  // Sort each keys values
@@ -123,19 +128,8 @@ void output_the_map(const map<string, vector<string>> & the_map){
     }
 }
 
-
-// Returns the amount of distinct words within a map
-// TODO: Figure out if it throws or not
-// Pre:
-//  None
-int amount_of_distinct_words(const map<string, vector<string>> & the_map){
-    return the_map.size();
-}
-
-
 // TODO: Figure out if you need to add if this function throws or not
 int main() {
     auto the_map = read_file();
-    cout << "Number of distinct words: " << amount_of_distinct_words(the_map) << "\n\n";
     output_the_map(the_map);
 }
