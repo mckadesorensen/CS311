@@ -67,6 +67,13 @@ map<string, vector<string>> read_file(){
         while (!file.eof()) {
 
             file >> data;
+            if(!file){
+                if(file.eof()) {
+                    break;
+                }
+                continue;
+            }
+
             vector<string> vec;
             if(the_map.empty()){                        // If the map is empty, create new key, and value.
                 the_map[data] = vec;
