@@ -67,15 +67,14 @@ map<string, vector<string>> read_file(){
         while (!file.eof()) {
 
             file >> data;
+            vector<string> vec;
             if(the_map.empty()){                        // If the map is empty, create new key, and value.
-                vector<string> vec;
                 the_map[data] = vec;
             } else {
                 bool check;
                 auto iter_key = the_map.find(data);     // Check to see if the data exists
 
                 if(iter_key == the_map.end()) {         // If data doesn't exist add it as a key
-                    vector<string> vec;
                     the_map[data] = vec;
                     if (last_data.empty()) {            // If data isn't defined yet, define it and continue
                         last_data = data;
@@ -118,20 +117,7 @@ void output_the_map(const map<string, vector<string>> & the_map){
 // Pre:
 //  None
 int amount_of_distinct_words(const map<string, vector<string>> & the_map){
-    vector<string> vec;
-    for(auto & items : the_map){
-        if(vec.empty()){                   // If vec is empty add first element
-            vec.push_back(items.first);
-        }
-
-        if(check_items(items.first, vec))   // Checks the key and adds it if needed
-            vec.push_back(items.first);
-
-        for(auto & item : items.second)     // Checks the values stored with the key, adds them if needed
-            if(check_items(item, vec))
-                vec.push_back(item);
-    }
-    return vec.size();
+    return the_map.size();
 }
 
 
