@@ -30,7 +30,7 @@ TEST_CASE("Const and non-const cuber objects")
     const Cuber y;
     INFO("CONST OR NON-CONST CUBER OBJECT NOT PASSING");
     REQUIRE( x.operator()(2) == 8 );
-    REQUIRE( y.operator()(1) == 8 );
+    REQUIRE( y.operator()(2) == 8 );
 
 
 }
