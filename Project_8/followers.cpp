@@ -53,55 +53,60 @@ bool check_items(const string & data, const vector<string> & vec){
     return true;
 }
 
+map<string, vector<string>> insert(const string & data,
+                                   string & last_data,
+                                   map<string, vector<string>> & the_map){
 
-// Reads the file and and places unique words in a map as a key with all the words
-// that follow it as the value stored in a vector.
-// TODO: Figure out if it throws or not
-map<string, vector<string>> read_file(){
-    ifstream file = open_file();
-    map<string, vector<string>> the_map;
-    string last_data;
+    vector<string> vec;
+    if(the_map.empty()){                        // If the map is empty, create new key, and value.
+        the_map[data] = vec;
+    } else {
+        bool check;
+        auto iter_key = the_map.find(data);     // Check to see if the data exists
 
-    if(file.is_open()) {
-        string data;
-        while (!file.eof()) {
-
-            file >> data;
-            if(!file){
-                if(file.eof()) {
-                    break;
-                }
-                continue;
-            }
-
-            vector<string> vec;
-            if(the_map.empty()){                        // If the map is empty, create new key, and value.
-                the_map[data] = vec;
-            } else {
-                bool check;
-                auto iter_key = the_map.find(data);     // Check to see if the data exists
-
-                if(iter_key == the_map.end()) {         // If data doesn't exist add it as a key
-                    the_map[data] = vec;
-                    if (last_data.empty()) {            // If data isn't defined yet, define it and continue
-                        last_data = data;
-                        continue;
-                    }
-                    check = check_items(data, the_map[last_data]);  // Make sure data isn't stored in the keys vector
-                } else {
-                    check = check_items(data, the_map[last_data]);  // Make sure data isn't stored in the keys vector
-                }
-                if(!check)      // If data was already stored continue with out adding another copy
-                    continue;
-                the_map[last_data].push_back(data);
+        if(iter_key == the_map.end()) {         // If data doesn't exist add it as a key
+            the_map[data] = vec;
+            if (last_data.empty()) {            // If data isn't defined yet, define it and continue
                 last_data = data;
+                return the_map;
             }
+            check = check_items(data, the_map[last_data]);  // Make sure data isn't stored in the keys vector
+        } else {
+            check = check_items(data, the_map[last_data]);  // Make sure data isn't stored in the keys vector
         }
-        file.close();
+        if(!check)      // If data was already stored continue with out adding another copy
+            return the_map;
+        the_map[last_data].push_back(data);
     }
     return the_map;
 }
 
+// Reads the file and and places unique words in a map as a key with all the words
+// that follow it as the value stored in a vector.
+// TODO: Figure out if it throws or not
+map<string, vector<string>> read_file() {
+    ifstream file = open_file();
+    map<string, vector<string>> the_map;
+    string last_data = "";
+    string data;
+
+    if (file.is_open()) {
+        while (!file.eof()) {
+
+            file >> data;
+            if (!file) {
+                if (file.eof()) {
+                    break;
+                }
+                continue;
+            }
+            the_map = insert(data, last_data, the_map);
+            last_data = data;
+        }
+    }
+    file.close();
+    return the_map;
+}
 
 // Sorts and formats each keys vector and prints the output.
 // Throws - TODO: Check to see if it actually throws
